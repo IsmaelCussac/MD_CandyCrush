@@ -8,7 +8,7 @@ public class GridModel {
 	private int xMax;
 	private int yMax;
 	Map<Case, Candy> grid = new HashMap<Case,Candy>();
-	public GridModel gridModel;
+	public static GridModel gridModel = new GridModel();
 	
 	private GridModel(){
 	}
@@ -44,5 +44,4 @@ public class GridModel {
 	public void setCandy(int x, int y, Candy candy){
 		grid.put(new Case(x,y), candy);
 	}
-
 }

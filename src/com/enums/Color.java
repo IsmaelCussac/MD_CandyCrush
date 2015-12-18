@@ -7,5 +7,9 @@ public enum Color {
 	YELLOW,
 	GREEN,
 	BLUE,
-	PURPLE
+	PURPLE;
+	
+	public static Color getRandom() {
+        return values()[(int) (Math.random() * values().length)];
+    }
 }

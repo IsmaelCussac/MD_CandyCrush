@@ -9,7 +9,6 @@ public class Candy {
 	private Action action;
 	
 	public Candy(){
-		
 	}
 	
 	public Color getColor() {
@@ -24,7 +23,4 @@ public class Candy {
 	public void setAction(Action action) {
 		this.action = action;
 	}
-	
-	
-
 }
