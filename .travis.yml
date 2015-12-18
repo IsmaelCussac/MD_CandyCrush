@@ -1,0 +1,6 @@
+script:
+- echo "compiling files"
+
+
+
+- echo "running tests"
