@@ -1,6 +1,1 @@
-script:
-- echo "compiling files"
-
-
-
-- echo "running tests"
+language: java
