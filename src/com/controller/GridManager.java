@@ -1,21 +1,26 @@
 package com.controller;
 
-import com.enums.Color;
+import com.enums.CandyColor;
 import com.model.Candy;
 import com.model.GridModel;
 
 public class GridManager {
 
-	public static GridManager gridManager = new GridManager();
-	private GridModel gridModel = GridModel.gridModel;
+	private static GridManager gridManager = new GridManager();
+	private GridModel gridModel = GridModel.getInstance();
 	private boolean marked[][];
 
 	private GridManager() {
 		marked = new boolean[gridModel.getxMax()][gridModel.getyMax()];
+		fill();
 	}
 
 	public GridModel getGridModel() {
 		return gridModel;
+	}
+	
+	public static GridManager getInstance(){
+		return gridManager;
 	}
 
 	public void setGridModel(GridModel gridModel) {
@@ -23,14 +28,13 @@ public class GridManager {
 	}
 
 	boolean fill() {
-
 		boolean modified = false;
 		for (int i = 0; i < gridModel.getxMax(); i++) {
 			for (int j = gridModel.getyMax() - 1; j >= 0; j--) {
 				if (gridModel.getCandy(i, j) == null) {
 					if (j == 0) {
 						Candy candy = new Candy();
-						candy.setColor(Color.getRandom());
+						candy.setColor(CandyColor.getRandom());
 						gridModel.setCandy(i, j, candy);
 					} else {
 						gridModel.setCandy(i, j, gridModel.getCandy(i, j));
@@ -74,7 +78,7 @@ public class GridManager {
 
 	}
 
-	private void swap(int x1, int y1, int x2, int y2) {
+	public void swap(int x1, int y1, int x2, int y2) {
 
 		Candy candyTmp = gridModel.getCandy(x1, y1);
 		gridModel.setCandy(x1, y1, gridModel.getCandy(x2, y2));
@@ -82,7 +86,7 @@ public class GridManager {
 
 	}
 
-	boolean isValidSwap(int x1, int y1, int x2, int y2) {
+	public boolean isValidSwap(int x1, int y1, int x2, int y2) {
 		// il faut que les cases soient dans la grille
 		if (x1 == -1 || x2 == -1 || y1 == -1 || y2 == -1)
 			return false;

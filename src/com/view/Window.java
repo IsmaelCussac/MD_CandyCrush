@@ -9,21 +9,20 @@ import javax.swing.JPanel;
 
 public class Window extends Panel {
 
-	private JPanel contentPanel;
+	//private JPanel contentPanel;
 
 	public Window() {
 
 		Frame frame = new Frame("Candy Crush");
-
+		final GamePanel gamePanel = new GamePanel();
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent event) {
 				System.exit(0);
 			}
 		});
 
-		// frame.add();
+		frame.add(gamePanel);
 		frame.pack();
-
 		frame.setVisible(true);
 
 		// try {

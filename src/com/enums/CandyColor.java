@@ -1,6 +1,6 @@
 package com.enums;
 
-public enum Color {
+public enum CandyColor {
 
 	RED,
 	ORANGE,
@@ -9,7 +9,7 @@ public enum Color {
 	BLUE,
 	PURPLE;
 	
-	public static Color getRandom() {
+	public static CandyColor getRandom() {
         return values()[(int) (Math.random() * values().length)];
     }
 }

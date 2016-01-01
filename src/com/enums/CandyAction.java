@@ -1,6 +1,6 @@
 package com.enums;
 
-public enum Action {
+public enum CandyAction {
 
 	NORMAL,
 	STRIPED,

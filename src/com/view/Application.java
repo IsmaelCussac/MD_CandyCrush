@@ -7,7 +7,6 @@ public class Application {
 
 	public Application() {
 		window = new Window();
-		// window.setVisible(true);
 	}
 
 	public static void main(String[] args) {
