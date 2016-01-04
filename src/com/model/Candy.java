@@ -1,26 +1,26 @@
 package com.model;
 
-import com.enums.Action;
-import com.enums.Color;
+import com.enums.CandyAction;
+import com.enums.CandyColor;
 
 public class Candy {
 	
-	private Color color;
-	private Action action;
+	private CandyColor color;
+	private CandyAction action;
 	
 	public Candy(){
 	}
 	
-	public Color getColor() {
+	public CandyColor getColor() {
 		return color;
 	}
-	public void setColor(Color color) {
+	public void setColor(CandyColor color) {
 		this.color = color;
 	}
-	public Action getAction() {
+	public CandyAction getAction() {
 		return action;
 	}
-	public void setAction(Action action) {
+	public void setAction(CandyAction action) {
 		this.action = action;
 	}
 }

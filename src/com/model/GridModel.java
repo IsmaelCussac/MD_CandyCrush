@@ -3,14 +3,20 @@ package com.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.controller.GridManager;
+
 public class GridModel {
 	
 	private int xMax;
 	private int yMax;
 	Map<Case, Candy> grid = new HashMap<Case,Candy>();
-	public static GridModel gridModel = new GridModel();
+	private static GridModel gridModel = new GridModel();
 	
 	private GridModel(){
+	}
+	
+	public static GridModel getInstance(){
+		return gridModel;
 	}
 
 	public int getxMax() {
