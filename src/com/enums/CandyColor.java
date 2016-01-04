@@ -3,7 +3,7 @@ package com.enums;
 public enum CandyColor {
 
 	RED,
-	ORANGE,
+	CYAN,
 	YELLOW,
 	GREEN,
 	BLUE,

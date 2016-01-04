@@ -2,17 +2,20 @@ package com.controller;
 
 import com.enums.CandyColor;
 import com.model.Candy;
+import com.model.Constants;
 import com.model.GridModel;
 
 public class GridManager {
 
 	private static GridManager gridManager = new GridManager();
-	private GridModel gridModel = GridModel.getInstance();
+	private GridModel gridModel;
 	private boolean marked[][];
 
 	private GridManager() {
-		marked = new boolean[gridModel.getxMax()][gridModel.getyMax()];
-		fill();
+		gridModel = GridModel.getInstance();
+		gridModel.setGrid();
+		marked = new boolean[Constants.xMax][Constants.yMax];
+		
 	}
 
 	public GridModel getGridModel() {
@@ -27,17 +30,17 @@ public class GridManager {
 		this.gridModel = gridModel;
 	}
 
-	boolean fill() {
+	public boolean fill() {
 		boolean modified = false;
-		for (int i = 0; i < gridModel.getxMax(); i++) {
-			for (int j = gridModel.getyMax() - 1; j >= 0; j--) {
+		for (int i = 0; i < Constants.xMax; i++) {
+			for (int j = Constants.yMax - 1; j >= 0; j--) {
 				if (gridModel.getCandy(i, j) == null) {
 					if (j == 0) {
 						Candy candy = new Candy();
 						candy.setColor(CandyColor.getRandom());
 						gridModel.setCandy(i, j, candy);
 					} else {
-						gridModel.setCandy(i, j, gridModel.getCandy(i, j));
+						gridModel.setCandy(i, j, gridModel.getCandy(i, j - 1));
 						gridModel.setCandy(i, j - 1, null);
 					}
 					modified = true;
@@ -47,10 +50,9 @@ public class GridManager {
 		return modified;
 	}
 
-	private boolean removeLines() {
-
-		for (int i = 0; i < gridModel.getxMax(); i++) {
-			for (int j = 0; j < gridModel.getyMax(); j++) {
+	public boolean removeAlignments() {
+		for (int i = 0; i < Constants.xMax; i++) {
+			for (int j = 0; j < Constants.yMax; j++) {
 				if (gridModel.getCandy(i, j) != null && horizontalAligned(i, j)) {
 					marked[i][j] = marked[i + 1][j] = marked[i + 2][j] = true;
 				}
@@ -59,10 +61,12 @@ public class GridManager {
 				}
 			}
 		}
+		
+		
 		// passe 2 : supprimer les cases marquées
 		boolean modified = false;
-		for (int i = 0; i < gridModel.getxMax(); i++) {
-			for (int j = 0; j < gridModel.getyMax(); j++) {
+		for (int i = 0; i < Constants.xMax; i++) {
+			for (int j = 0; j < Constants.yMax; j++) {
 				if (marked[i][j]) {
 					gridModel.setCandy(i, j, null);
 					marked[i][j] = false;
@@ -111,20 +115,21 @@ public class GridManager {
 	}
 
 	boolean horizontalAligned(int i, int j) {
-		if (i < 0 || j < 0 || i >= 6 || j >= 8)
+		if (i < 0 || j < 0 || i >= Constants.xMax-2 || j >= Constants.yMax)
 			return false;
-		if (gridModel.getCandy(i, j) == gridModel.getCandy(i + 1, j)
-				&& gridModel.getCandy(i, j) == gridModel.getCandy(i + 2, j))
+
+		if (gridModel.getCandy(i, j).getColor() == gridModel.getCandy(i + 1, j).getColor()
+				&& gridModel.getCandy(i, j).getColor() == gridModel.getCandy(i + 2, j).getColor())
 			return true;
 		return false;
 	}
 
 	// est-ce qu'on a trois cases de la même couleur vers le bas depuis (i, j) ?
 	boolean verticalAligned(int i, int j) {
-		if (i < 0 || j < 0 || i >= 8 || j >= 6)
+		if (i < 0 || j < 0 || i >= Constants.yMax || j >= Constants.yMax-2)
 			return false;
-		if (gridModel.getCandy(i, j) == gridModel.getCandy(i, j + 1)
-				&& gridModel.getCandy(i, j) == gridModel.getCandy(i, j + 2))
+		if (gridModel.getCandy(i, j).getColor() == gridModel.getCandy(i, j + 1).getColor()
+				&& gridModel.getCandy(i, j).getColor() == gridModel.getCandy(i, j + 2).getColor())
 			return true;
 		return false;
 	}

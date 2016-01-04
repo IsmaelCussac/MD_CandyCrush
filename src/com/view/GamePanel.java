@@ -9,14 +9,32 @@ import java.awt.Panel;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.lang.reflect.Field;
 
 import com.controller.GridManager;
+import com.model.Constants;
 
-public class GamePanel extends Panel implements MouseListener, MouseMotionListener {
+public class GamePanel extends Panel implements MouseListener,
+		MouseMotionListener, Runnable {
 
-	private GridManager gridManager = GridManager.getInstance();
+	private GridManager gridManager;
 
-	Color colors[] = { Color.WHITE, Color.RED, Color.GREEN, Color.BLUE, Color.GRAY, Color.PINK, Color.CYAN };
+	public GamePanel() {
+		gridManager = GridManager.getInstance();
+		
+		while (gridManager.fill());
+		
+		while (gridManager.removeAlignments()) {
+			gridManager.fill();
+		}
+		
+		addMouseListener(this);
+		addMouseMotionListener(this);
+		new Thread(this).start();
+	}
+
+	Color colors[] = { Color.WHITE, Color.RED, Color.GREEN, Color.BLUE,
+			Color.GRAY, Color.PINK, Color.CYAN };
 
 	int selectedX = -1, selectedY = -1;
 	int swappedX = -1, swappedY = -1;
@@ -25,7 +43,7 @@ public class GamePanel extends Panel implements MouseListener, MouseMotionListen
 	Image buffer;
 
 	public Dimension getPreferredSize() {
-		return new Dimension(32 * 8 + 1, 32 * 8 + 1);
+		return new Dimension(32 * Constants.xMax + 1, 32 * Constants.yMax + 1);
 	}
 
 	public void paint(Graphics g2) {
@@ -40,8 +58,8 @@ public class GamePanel extends Panel implements MouseListener, MouseMotionListen
 		// afficher la grille vide
 		g.setColor(Color.BLACK);
 		for (int i = 0; i < 9; i++) {
-			g.drawLine(32 * i, 0, 32 * i, 8 * 32 + 1);
-			g.drawLine(0, 32 * i, 8 * 32 + 1, 32 * i);
+			g.drawLine(32 * i, 0, 32 * i, Constants.xMax * 32 + 1);
+			g.drawLine(0, 32 * i, Constants.xMax * 32 + 1, 32 * i);
 		}
 
 		// afficher la première case sélectionnée
@@ -57,9 +75,15 @@ public class GamePanel extends Panel implements MouseListener, MouseMotionListen
 		}
 
 		// afficher le contenu de la grille
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				g.setColor(Color.getColor(gridManager.getGridModel().getCandy(i, j).getColor().toString()));
+		for (int i = 0; i < Constants.xMax; i++) {
+			for (int j = 0; j < Constants.yMax; j++) {
+				try {
+					Field field = Class.forName("java.awt.Color").getField(
+							gridManager.getGridModel().getCandy(i, j)
+									.getColor().toString());
+					g.setColor((Color) field.get(null));
+				} catch (Exception e) {
+				}
 				g.fillOval(32 * i + 3, 32 * j + 3, 27, 27);
 			}
 		}
@@ -83,7 +107,8 @@ public class GamePanel extends Panel implements MouseListener, MouseMotionListen
 			swappedX = e.getX() / 32;
 			swappedY = e.getY() / 32;
 			// si l'échange n'est pas valide, on cache la deuxième case
-			if (!gridManager.isValidSwap(selectedX, selectedY, swappedX, swappedY)) {
+			if (!gridManager.isValidSwap(selectedX, selectedY, swappedX,
+					swappedY)) {
 				swappedX = swappedY = -1;
 			}
 		}
@@ -93,7 +118,8 @@ public class GamePanel extends Panel implements MouseListener, MouseMotionListen
 	public void mouseReleased(MouseEvent e) {
 		// lorsque l'on relâche la souris il faut faire l'échange et cacher les
 		// cases
-		if (selectedX != -1 && selectedY != -1 && swappedX != -1 && swappedY != -1) {
+		if (selectedX != -1 && selectedY != -1 && swappedX != -1
+				&& swappedY != -1) {
 			gridManager.swap(selectedX, selectedY, swappedX, swappedY);
 		}
 		selectedX = selectedY = swappedX = swappedY = -1;
@@ -113,5 +139,27 @@ public class GamePanel extends Panel implements MouseListener, MouseMotionListen
 	public void mouseDragged(MouseEvent e) {
 		mouseMoved(e);
 	}
+	
+	public void update(Graphics g) {
+		paint(g);
+	}
 
+	public void run() {
+		while (true) {
+			// un pas de simulation toutes les 100ms
+			try {
+				Thread.currentThread();
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+			}
+
+			// s'il n'y a pas de case vide, chercher des alignements
+			if (!gridManager.fill()) {
+				gridManager.removeAlignments();
+			}
+
+			// redessiner
+			repaint();
+		}
+	}
 }

@@ -1,53 +1,31 @@
 package com.model;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.controller.GridManager;
 
 public class GridModel {
 	
-	private int xMax;
-	private int yMax;
-	Map<Case, Candy> grid = new HashMap<Case,Candy>();
+	private Candy[][] grid;
 	private static GridModel gridModel = new GridModel();
 	
 	private GridModel(){
 	}
 	
+	public void setGrid(){
+		grid = new Candy[Constants.xMax][Constants.yMax];
+	}
+	
+	public Candy[][] getGrid(){
+		return grid;
+	}
+	
 	public static GridModel getInstance(){
 		return gridModel;
 	}
-
-	public int getxMax() {
-		return xMax;
-	}
-
-	public void setxMax(int xMax) {
-		this.xMax = xMax;
-	}
-
-	public int getyMax() {
-		return yMax;
-	}
-
-	public void setyMax(int yMax) {
-		this.yMax = yMax;
-	}
-
-	public Map<Case, Candy> getGrid() {
-		return grid;
-	}
-
-	public void setGrid(Map<Case, Candy> grid) {
-		this.grid = grid;
-	}
 	
 	public Candy getCandy(int x, int y){
-		return grid.get(new Case(x,y));
+		return grid[x][y];
 	}
 	
 	public void setCandy(int x, int y, Candy candy){
-		grid.put(new Case(x,y), candy);
+		grid[x][y] =  candy;
 	}
 }
