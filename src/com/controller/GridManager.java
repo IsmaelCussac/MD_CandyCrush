@@ -43,10 +43,6 @@ public class GridManager {
 		return modified;
 	}
 
-	private void checkGrid() {
-
-	}
-
 	private boolean removeLines() {
 
 		for (int i = 0; i < gridModel.getxMax(); i++) {
@@ -128,5 +124,4 @@ public class GridManager {
 			return true;
 		return false;
 	}
-
 }
