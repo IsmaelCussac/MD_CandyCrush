@@ -2,11 +2,10 @@ package com.view;
 
 public class Application {
 
-	private Window window;
 	private static Application instance;
 
 	public Application() {
-		window = new Window();
+		new Window();
 	}
 
 	public static void main(String[] args) {

@@ -126,7 +126,7 @@ public class GridManager {
 
 	// est-ce qu'on a trois cases de la même couleur vers le bas depuis (i, j) ?
 	boolean verticalAligned(int i, int j) {
-		if (i < 0 || j < 0 || i >= Constants.yMax || j >= Constants.yMax-2)
+		if (i < 0 || j < 0 || i >= Constants.xMax || j >= Constants.yMax-2)
 			return false;
 		if (gridModel.getCandy(i, j).getColor() == gridModel.getCandy(i, j + 1).getColor()
 				&& gridModel.getCandy(i, j).getColor() == gridModel.getCandy(i, j + 2).getColor())
