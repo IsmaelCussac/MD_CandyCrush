@@ -25,7 +25,7 @@ public class GamePanel extends Panel implements MouseListener,
 		while (gridManager.fill());
 		
 		while (gridManager.removeAlignments()) {
-			gridManager.fill();
+			while(gridManager.fill());
 		}
 		
 		addMouseListener(this);

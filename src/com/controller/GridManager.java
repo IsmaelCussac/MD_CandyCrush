@@ -51,6 +51,7 @@ public class GridManager {
 	}
 
 	public boolean removeAlignments() {
+
 		for (int i = 0; i < Constants.xMax; i++) {
 			for (int j = 0; j < Constants.yMax; j++) {
 				if (gridModel.getCandy(i, j) != null && horizontalAligned(i, j)) {
@@ -61,7 +62,6 @@ public class GridManager {
 				}
 			}
 		}
-		
 		
 		// passe 2 : supprimer les cases marquées
 		boolean modified = false;
