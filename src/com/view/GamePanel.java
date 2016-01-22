@@ -21,13 +21,13 @@ public class GamePanel extends Panel implements MouseListener,
 
 	public GamePanel() {
 		gridManager = GridManager.getInstance();
-		
+
 		while (gridManager.fill());
-		
+
 		while (gridManager.removeAlignments()) {
-			while(gridManager.fill());
+			gridManager.fill();
 		}
-		
+
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		new Thread(this).start();
@@ -43,7 +43,7 @@ public class GamePanel extends Panel implements MouseListener,
 	Image buffer;
 
 	public Dimension getPreferredSize() {
-		return new Dimension(32 * Constants.xMax + 1, 32 * Constants.yMax + 1);
+		return new Dimension(32 * Constants.xMax + 1 + 100, 32 * Constants.yMax + 1);
 	}
 
 	public void paint(Graphics g2) {
@@ -57,11 +57,12 @@ public class GamePanel extends Panel implements MouseListener,
 
 		// afficher la grille vide
 		g.setColor(Color.BLACK);
-		for (int i = 0; i < 9; i++) {
-			g.drawLine(32 * i, 0, 32 * i, Constants.xMax * 32 + 1);
+		for (int i = 0; i <= Constants.xMax; i++) {
+			g.drawLine(32 * i, 0, 32 * i, Constants.yMax * 32 + 1);
+		}
+		for (int i = 0; i <= Constants.yMax; i++) {
 			g.drawLine(0, 32 * i, Constants.xMax * 32 + 1, 32 * i);
 		}
-
 		// afficher la première case sélectionnée
 		if (selectedX != -1 && selectedY != -1) {
 			g.setColor(Color.ORANGE);
@@ -87,6 +88,8 @@ public class GamePanel extends Panel implements MouseListener,
 				g.fillOval(32 * i + 3, 32 * j + 3, 27, 27);
 			}
 		}
+		
+		g.drawString("Score: " + gridManager.getScore(), 280, 200);
 
 		// copier l'image à l'écran
 		g2.drawImage(buffer, 0, 0, null);
@@ -98,6 +101,14 @@ public class GamePanel extends Panel implements MouseListener,
 		// la première case
 		selectedX = e.getX() / 32;
 		selectedY = e.getY() / 32;
+
+		// affiche la couleur du pion cliqué
+		// if (selectedX != -1 && selectedY != -1) {
+		// swappedX = e.getX() / 32;
+		// swappedY = e.getY() / 32;
+		// System.out.println(gridManager.getGridModel().getCandy(swappedX,
+		// swappedY).getColor());
+		// }
 		repaint();
 	}
 
@@ -139,7 +150,7 @@ public class GamePanel extends Panel implements MouseListener,
 	public void mouseDragged(MouseEvent e) {
 		mouseMoved(e);
 	}
-	
+
 	public void update(Graphics g) {
 		paint(g);
 	}
@@ -148,8 +159,7 @@ public class GamePanel extends Panel implements MouseListener,
 		while (true) {
 			// un pas de simulation toutes les 100ms
 			try {
-				Thread.currentThread();
-				Thread.sleep(100);
+				Thread.currentThread().sleep(100);
 			} catch (InterruptedException e) {
 			}
 

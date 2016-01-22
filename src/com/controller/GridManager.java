@@ -4,17 +4,20 @@ import com.enums.CandyColor;
 import com.model.Candy;
 import com.model.Constants;
 import com.model.GridModel;
+import com.model.Score;
 
 public class GridManager {
 
 	private static GridManager gridManager = new GridManager();
 	private GridModel gridModel;
 	private boolean marked[][];
+	private Score score;
 
 	private GridManager() {
 		gridModel = GridModel.getInstance();
 		gridModel.setGrid();
 		marked = new boolean[Constants.xMax][Constants.yMax];
+		score = new Score();
 		
 	}
 
@@ -28,6 +31,10 @@ public class GridManager {
 
 	public void setGridModel(GridModel gridModel) {
 		this.gridModel = gridModel;
+	}
+	
+	public int getScore(){
+		return score.getScore();
 	}
 
 	public boolean fill() {
@@ -56,9 +63,11 @@ public class GridManager {
 			for (int j = 0; j < Constants.yMax; j++) {
 				if (gridModel.getCandy(i, j) != null && horizontalAligned(i, j)) {
 					marked[i][j] = marked[i + 1][j] = marked[i + 2][j] = true;
+					score.incScore();
 				}
 				if (gridModel.getCandy(i, j) != null && verticalAligned(i, j)) {
 					marked[i][j] = marked[i][j + 1] = marked[i][j + 2] = true;
+					score.incScore();
 				}
 			}
 		}

@@ -7,7 +7,7 @@ public enum CandyColor {
 	YELLOW,
 	GREEN,
 	BLUE,
-	PURPLE;
+	BLACK;
 	
 	public static CandyColor getRandom() {
         return values()[(int) (Math.random() * values().length)];
